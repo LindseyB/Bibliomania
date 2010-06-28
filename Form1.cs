@@ -12,8 +12,6 @@ namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
-        public List<Book> books;
-
         public Form1()
         {
             InitializeComponent();
@@ -21,6 +19,8 @@ namespace WindowsFormsApplication1
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            List<Book> readBooks = new List<Book>();           
+
             XmlTextReader textReader = new XmlTextReader("J:\\database\\cache\\media.xml");
             textReader.Read();
 
@@ -42,11 +42,15 @@ namespace WindowsFormsApplication1
 
                     if (curPage > 0)
                     {
-                        bookList.Items.Add(title + " on page " + curPage);
-                        //books.Add(new Book(title, author, curPage));
+                        readBooks.Add(new Book(title, author, curPage));
                     }
 
                 }
+            }
+
+            foreach (Book bookItem in readBooks)
+            {
+                bookList.Items.Add(bookItem.Title + " on page " + bookItem.CurrentPage);
             }
 
             
