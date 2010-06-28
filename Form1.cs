@@ -15,6 +15,7 @@ namespace WindowsFormsApplication1
         public Form1()
         {
             InitializeComponent();
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -50,7 +51,11 @@ namespace WindowsFormsApplication1
 
             foreach (Book bookItem in readBooks)
             {
-                bookList.Items.Add(bookItem.Title + " on page " + bookItem.CurrentPage);
+                bookItem.setId();
+                if (bookItem.GoodreadsId != 0)
+                {
+                    bookList.Items.Add(bookItem.Title + " on page " + bookItem.CurrentPage);
+                }
             }
 
             

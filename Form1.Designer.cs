@@ -49,6 +49,7 @@
             // 
             this.bookList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.bookList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.bookList.CheckOnClick = true;
             this.bookList.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.bookList.ForeColor = System.Drawing.SystemColors.ScrollBar;
             this.bookList.FormattingEnabled = true;
