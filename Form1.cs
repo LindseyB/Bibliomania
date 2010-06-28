@@ -18,9 +18,9 @@ namespace WindowsFormsApplication1
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void loadBooks()
         {
-            List<Book> readBooks = new List<Book>();           
+            List<Book> readBooks = new List<Book>();
 
             XmlTextReader textReader = new XmlTextReader("J:\\database\\cache\\media.xml");
             textReader.Read();
@@ -55,10 +55,20 @@ namespace WindowsFormsApplication1
                 if (bookItem.GoodreadsId != 0)
                 {
                     bookList.Items.Add(bookItem.Title + " on page " + bookItem.CurrentPage);
+                    bookList.SetItemChecked(bookList.Items.Count - 1, true);
                 }
-            }
 
-            
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            loadBooks();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
