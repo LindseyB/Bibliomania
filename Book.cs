@@ -7,21 +7,39 @@ using System.Security;
 
 namespace WindowsFormsApplication1
 {
+    [Serializable()]
     public class Book
     {
         private String _title;
+        private String _origTitle;  // used to ID books because the title will change
         private String _author;
         private int _currentPage;
         private int _goodreadsId;
 
         public Book(String title, String author, int currentPage)
         {
+            _origTitle = title;
             _title = title;
             _author = author;
             _currentPage = currentPage;
+            _goodreadsId = -1;          // this value will tell me if I read it from the settings or not
         }
 
-        /* Getters and Setters */ 
+        public Book(String origTitle, String title, String author, int currentPage, int goodreadsId)
+        {
+            _origTitle = origTitle;
+            _title = title;
+            _author = author;
+            _currentPage = currentPage;
+            _goodreadsId = goodreadsId;
+        }
+
+        /* Getters and Setters */
+        public String OrigTitle
+        {
+            get { return _origTitle; }
+        }
+
         public String Title
         {
             get { return _title; }
@@ -46,10 +64,24 @@ namespace WindowsFormsApplication1
             set { _goodreadsId = value; }
         }
 
+        public override String ToString()
+        {
+            // had to make the divider something that probably wouldn't be in the title
+            return _origTitle + "~" + _title + "~" + _author + "~" + _currentPage + "~" +  _goodreadsId + "\n";
+        }
+
         public void setId()
         {
+            // we already have it - go away
+            if (_goodreadsId != -1 && _goodreadsId != 0)
+            {
+                return;
+            }
+
+            Console.WriteLine("Let's ask the internet");
+
             // generate the url for the api call
-            String url = "http://www.goodreads.com/api/book_url/" + SecurityElement.Escape(_title.Replace(" ", "%2B")) + "%2B" + SecurityElement.Escape(_author.Replace(" ", "%2B")) + "?key=eStfu8ZZXxins2tOdlVjUA";
+            String url = "http://www.goodreads.com/api/book_url/" + SecurityElement.Escape(_origTitle.Replace(" ", "%2B")) + "%2B" + SecurityElement.Escape(_author.Replace(" ", "%2B")) + "?key=eStfu8ZZXxins2tOdlVjUA";
             XmlTextReader textReader = new XmlTextReader(url);
             textReader.Read();
 
