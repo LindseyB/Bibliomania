@@ -295,10 +295,7 @@ namespace OAuth {
         public virtual string GenerateTimeStamp() {
             // Default implementation of UNIX time of the current UTC time
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            //return Convert.ToInt64(ts.TotalSeconds).ToString();
-            string timeStamp = ts.TotalSeconds.ToString();
-            timeStamp = timeStamp.Substring(0, timeStamp.IndexOf("."));
-            return timeStamp;
+            return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
 
         /// <summary>

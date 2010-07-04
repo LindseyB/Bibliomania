@@ -11,6 +11,7 @@ using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
+using System.Net;
 using OAuth;
 
 
@@ -128,16 +129,19 @@ namespace WindowsFormsApplication1
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            getOAuth();
+            getOAuthToken();
         }
 
-        public void getOAuth()
+        public void getOAuthToken()
         {
             string consumerKey = "eStfu8ZZXxins2tOdlVjUA";
-            string consumerSecret = "A773YHERJAWODRasHREh9GOjFTEuGdGQvu1cfbXFfM";
+            string consumerSecret = "A773YHERJAWODRasHREh9GOjFTEuGdGQvu1cfbXFfM";  // shhh! It's a secret
 
-            Uri uri = new Uri("http://goodreads.com/oauth/request_token");
+            // please note that the url needs to be EXACTLY the url it needs to / will hit
+            // this means if the page forwards foo.bar to www.foo.bar the uri needs to be specified as www.foo.bar
+            Uri uri = new Uri("http://www.goodreads.com/oauth/request_token");
             OAuthBase oAuth = new OAuthBase();
+            
             string nonce = oAuth.GenerateNonce();
             string timeStamp = oAuth.GenerateTimeStamp();
             string normalizedUrl;
@@ -146,20 +150,45 @@ namespace WindowsFormsApplication1
 
             sig = HttpUtility.UrlEncode(sig);
 
-            StringBuilder sb = new StringBuilder(uri.ToString());
-            sb.AppendFormat("?oauth_consumer_key={0}&", consumerKey);
-            /*sb.AppendFormat("oauth_nonce={0}&", nonce);
-            sb.AppendFormat("oauth_timestamp={0}&", timeStamp);
-            sb.AppendFormat("oauth_signature_method={0}&", "HMAC-SHA1");
-            sb.AppendFormat("oauth_version={0}&", "1.0");*/
-            sb.AppendFormat("oauth_signature={0}", sig);
+            string request_url = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
 
-            System.Diagnostics.Debug.WriteLine(sb.ToString()); 
+            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(request_url);
+            var responseStream = httpRequest.GetResponse().GetResponseStream();
+
+            byte[] buf = new byte[1024];
+            int count = 0;
+            StringBuilder sb = new StringBuilder("");
+            string tempString;
+
+            do
+            {
+                // fill the buffer with data
+                count = responseStream.Read(buf, 0, buf.Length);
+
+                // make sure we read some data
+                if (count != 0)
+                {
+                    // translate from bytes to ASCII text
+                    tempString = Encoding.ASCII.GetString(buf, 0, count);
+
+                    // continue building the string
+                    sb.Append(tempString);
+                }
+            }
+            while (count > 0);
+
+            // parse out the tokens from the response
+            string oauthToken = sb.ToString().Substring(12,sb.ToString().IndexOf('&')-12);
+            string oauthTokenSecret = sb.ToString().Substring(sb.ToString().IndexOf('&') + 20);
+
+            Console.WriteLine("token: " + oauthToken + " secret: " + oauthTokenSecret);
+
+            System.Diagnostics.Debug.WriteLine(request_url);
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-            getOAuth();
+            getOAuthToken();
         }
     }
 }
