@@ -18,3 +18,10 @@ C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\Bibliomania.exe
 C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\Bibliomania.pdb
 C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\Bibliomania.exe
 C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\Bibliomania.pdb
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\Bibliomania.exe.manifest
+C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\Bibliomania.application
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\Bibliomania.TrustInfo.xml
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\Bibliomania.exe.manifest
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\Bibliomania.application

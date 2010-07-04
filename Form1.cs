@@ -10,6 +10,8 @@ using System.Xml;
 using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Web;
+using OAuth;
 
 
 namespace WindowsFormsApplication1
@@ -126,7 +128,38 @@ namespace WindowsFormsApplication1
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            getOAuth();
+        }
 
+        public void getOAuth()
+        {
+            string consumerKey = "eStfu8ZZXxins2tOdlVjUA";
+            string consumerSecret = "A773YHERJAWODRasHREh9GOjFTEuGdGQvu1cfbXFfM";
+
+            Uri uri = new Uri("http://goodreads.com/oauth/request_token");
+            OAuthBase oAuth = new OAuthBase();
+            string nonce = oAuth.GenerateNonce();
+            string timeStamp = oAuth.GenerateTimeStamp();
+            string normalizedUrl;
+            string normalizedRequestParameters;
+            string sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, null, null, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+
+            sig = HttpUtility.UrlEncode(sig);
+
+            StringBuilder sb = new StringBuilder(uri.ToString());
+            sb.AppendFormat("?oauth_consumer_key={0}&", consumerKey);
+            /*sb.AppendFormat("oauth_nonce={0}&", nonce);
+            sb.AppendFormat("oauth_timestamp={0}&", timeStamp);
+            sb.AppendFormat("oauth_signature_method={0}&", "HMAC-SHA1");
+            sb.AppendFormat("oauth_version={0}&", "1.0");*/
+            sb.AppendFormat("oauth_signature={0}", sig);
+
+            System.Diagnostics.Debug.WriteLine(sb.ToString()); 
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            getOAuth();
         }
     }
 }
