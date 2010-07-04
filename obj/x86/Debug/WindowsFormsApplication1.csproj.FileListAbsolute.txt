@@ -8,3 +8,13 @@ C:\Users\Lindsey\documents\visual studio 2010\Projects\WindowsFormsApplication1\
 C:\Users\Lindsey\documents\visual studio 2010\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.exe
 C:\Users\Lindsey\documents\visual studio 2010\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.pdb
 C:\Users\Lindsey\documents\visual studio 2010\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\WindowsFormsApplication1.exe
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\WindowsFormsApplication1.pdb
+C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\Lindsey\Documents\code\Bibliomania\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Lindsey\Documents\code\Bibliomania\obj\x86\Debug\GenerateResource.write.1.tlog

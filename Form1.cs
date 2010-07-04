@@ -50,8 +50,17 @@ namespace WindowsFormsApplication1
             Console.WriteLine("Settings: " + settingsBooksString);
 
             // open up the readers XML data about the users read books
-            XmlTextReader textReader = new XmlTextReader("J:\\database\\cache\\media.xml");
-            textReader.Read();
+            XmlTextReader textReader = new XmlTextReader("tests\\media.xml");
+
+            try
+            {
+                textReader.Read();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("No Valid Ebook Reader found.");
+                Console.WriteLine(e.ToString());
+            }
 
             while (textReader.Read())
             {
