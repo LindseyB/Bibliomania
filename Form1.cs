@@ -180,10 +180,20 @@ namespace WindowsFormsApplication1
             // parse out the tokens from the response
             string oauthToken = sb.ToString().Substring(12,sb.ToString().IndexOf('&')-12);
             string oauthTokenSecret = sb.ToString().Substring(sb.ToString().IndexOf('&') + 20);
+            
+            // go get authorized
+            uri = new Uri("http://www.goodreads.com/oauth/authorize");
+            oAuth = new OAuthBase();
+            nonce = oAuth.GenerateNonce();
+            timeStamp = oAuth.GenerateTimeStamp();
+
+            // I am doing this just for the sake of populating normalizedUlr and normalizedRequestParameters
+            oAuth.GenerateSignature(uri, consumerKey, consumerSecret, null, null, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
 
             Console.WriteLine("token: " + oauthToken + " secret: " + oauthTokenSecret);
-
-            System.Diagnostics.Debug.WriteLine(request_url);
+            string oauthURL = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_token=" + oauthToken;
+            // open a browser and allow the user to authorize 
+            System.Diagnostics.Process.Start(oauthURL);
         }
 
         private void label1_Click(object sender, EventArgs e)
