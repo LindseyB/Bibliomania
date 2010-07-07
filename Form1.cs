@@ -188,6 +188,13 @@ namespace WindowsFormsApplication1
             string oauthURL = uri.ToString() + "?oauth_token=" + oauthToken;
             // open a browser and allow the user to authorize 
             System.Diagnostics.Process.Start(oauthURL);
+
+            uri = new Uri("http://www.goodreads.com/oauth/access_token");
+            nonce = oAuth.GenerateNonce();
+            timeStamp = oAuth.GenerateTimeStamp();
+            sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, null, null, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+            sig = HttpUtility.UrlEncode(sig);
+            Console.WriteLine(normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig + "&oauth_token=" + oauthToken);
         }
 
         private void label1_Click(object sender, EventArgs e)
