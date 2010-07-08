@@ -164,24 +164,41 @@ namespace WindowsFormsApplication1
             // open a browser and allow the user to authorize 
             System.Diagnostics.Process.Start(oauthURL);
 
+            // Instead of sleeping prompt the user to verify that they entered their credentials before proceeding to the next step
+            System.Threading.Thread.Sleep(10000);
 
             uri = new Uri("http://www.goodreads.com/oauth/access_token");
             nonce = oAuth.GenerateNonce();
             timeStamp = oAuth.GenerateTimeStamp();
+            // this time we need our oauth token and oauth token secret
             sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
             sig = HttpUtility.UrlEncode(sig);
+
+            // notice that the sig is always being appended to the end
             string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
 
-            Console.WriteLine(accessUrl);
-
-            //oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
-            Console.WriteLine(oauthToken + oauthTokenSecret);
+            oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
+            Console.WriteLine("ouathToken: " + oauthToken + "oauthTokenSecret:" + oauthTokenSecret);
         }
 
         private void oauthTokenReq(string url, out string oauthTok, out string oauthTokSecret)
         {
+            Console.WriteLine(url);
+
             HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
-            var responseStream = httpRequest.GetResponse().GetResponseStream();
+            Stream responseStream;
+            
+            try
+            {
+                responseStream = httpRequest.GetResponse().GetResponseStream();
+            }
+            catch (WebException e)
+            {
+                Console.WriteLine(e.Message);
+                oauthTok = "";
+                oauthTokSecret = "";
+                return;
+            }
 
             byte[] buf = new byte[1024];
             int count = 0;
