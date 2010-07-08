@@ -151,8 +151,36 @@ namespace WindowsFormsApplication1
             sig = HttpUtility.UrlEncode(sig);
 
             string request_url = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
+            string oauthToken;
+            string oauthTokenSecret;
 
-            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(request_url);
+            oauthTokenReq(request_url, out oauthToken, out oauthTokenSecret);
+
+            Console.WriteLine("token: " + oauthToken + " secret: " + oauthTokenSecret);
+            
+            // go get authorized
+            uri = new Uri("http://www.goodreads.com/oauth/authorize");
+            string oauthURL = uri.ToString() + "?oauth_token=" + oauthToken;
+            // open a browser and allow the user to authorize 
+            System.Diagnostics.Process.Start(oauthURL);
+
+
+            uri = new Uri("http://www.goodreads.com/oauth/access_token");
+            nonce = oAuth.GenerateNonce();
+            timeStamp = oAuth.GenerateTimeStamp();
+            sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+            sig = HttpUtility.UrlEncode(sig);
+            string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
+
+            Console.WriteLine(accessUrl);
+
+            //oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
+            Console.WriteLine(oauthToken + oauthTokenSecret);
+        }
+
+        private void oauthTokenReq(string url, out string oauthTok, out string oauthTokSecret)
+        {
+            HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
             var responseStream = httpRequest.GetResponse().GetResponseStream();
 
             byte[] buf = new byte[1024];
@@ -177,24 +205,8 @@ namespace WindowsFormsApplication1
             }
             while (count > 0);
 
-            // parse out the tokens from the response
-            string oauthToken = sb.ToString().Substring(12,sb.ToString().IndexOf('&')-12);
-            string oauthTokenSecret = sb.ToString().Substring(sb.ToString().IndexOf('&') + 20);
-
-            Console.WriteLine("token: " + oauthToken + " secret: " + oauthTokenSecret);
-            
-            // go get authorized
-            uri = new Uri("http://www.goodreads.com/oauth/authorize");
-            string oauthURL = uri.ToString() + "?oauth_token=" + oauthToken;
-            // open a browser and allow the user to authorize 
-            System.Diagnostics.Process.Start(oauthURL);
-
-            uri = new Uri("http://www.goodreads.com/oauth/access_token");
-            nonce = oAuth.GenerateNonce();
-            timeStamp = oAuth.GenerateTimeStamp();
-            sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, null, null, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
-            sig = HttpUtility.UrlEncode(sig);
-            Console.WriteLine(normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig + "&oauth_token=" + oauthToken);
+            oauthTok = sb.ToString().Substring(12, sb.ToString().IndexOf('&') - 12);
+            oauthTokSecret = sb.ToString().Substring(sb.ToString().IndexOf('&') + 20);
         }
 
         private void label1_Click(object sender, EventArgs e)
