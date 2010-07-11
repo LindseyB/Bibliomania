@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xdbLite xmlns="http://xscool.net/xdb/1" xmlns:xs1="http://www.kinoma.com/FskCache/1" default="string" nextID="19">
+	<indexes>
+		<index name="indexSource" type="string,unique"/>
+		<index name="indexArtist" type="string"/>
+		<index name="indexAlbum" type="string"/>
+		<index name="indexDate" type="number"/>
+		<index name="indexDateTime" type="number"/>
+		<index name="indexDimensions" type="integer"/>
+		<index name="indexDuration" type="integer"/>
+		<index name="indexGenre" type="string"/>
+		<index name="indexTitle" type="string"/>
+		<index name="indexPlaylist" type="string"/>
+		<index name="indexSize" type="integer"/>
+		<index name="indexPath" type="string,sensitive"/>
+	</indexes>
+	<records>
+		<xs1:library id="0" name="CCCCCCCCCCCC-CCCC-CCCC-CCCCCCCCCCCC" title="Library">
+			<xs1:accepted>true</xs1:accepted>
+		</xs1:library>
+		<xs1:watchSpecial id="1" name="mediaPath" title="kbook">
+			<xs1:accepted>true</xs1:accepted>
+		</xs1:watchSpecial>
+		<xs1:text author="Epicurious" page="0" pageOffset="0" part="0" scale="0" sourceid="1" id="2" date="Tue, 01 Jun 2010 14:32:53 GMT" tz="240" mime="application/x-sony-bbeb" path="database/media/books/CBUS12511005200Q.lrf" size="511488" title="Epicurious Get Closer to Your Food">
+			<xs1:thumbnail width="60" height="80">
+				<xs1:jpeg>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</xs1:jpeg>
+			</xs1:thumbnail>
+		</xs1:text>
+		<xs1:text author="Charlaine Harris" page="209" pageOffset="5" part="0" scale="1" sourceid="1" id="3" date="Thu, 24 Jun 2010 00:44:48 GMT" tz="240" mime="application/epub+zip" path="database/media/books/Harris, Charlaine/Dead to the World_ A True Blood Novel - Charlaine Harris_1047.epub" size="251937" title="Dead to the World: A True Blood Novel">
+			<xs1:bookmarkDate>Thu, 01 Jul 2010 06:40:10 GMT</xs1:bookmarkDate>
+		</xs1:text>
+		<xs1:text author="Stieg Larsson" page="0" pageOffset="0" part="0" scale="0" sourceid="1" id="4" date="Thu, 24 Jun 2010 00:45:18 GMT" tz="240" mime="application/epub+zip" path="database/media/books/Larsson, Stieg/The Girl with the Dragon Tattoo - Stieg Larsson_1044.epub" size="624925" title="The Girl with the Dragon Tattoo"/>
+		<xs1:text author="Unknown" page="2" pageOffset="2" part="0" scale="0" sourceid="1" id="5" date="Thu, 24 Jun 2010 00:54:34 GMT" tz="240" mime="application/epub+zip" path="database/media/books/Unknown/The Art of Deception - Unknown_526.epub" size="462138" title="The Art of Deception"/>
+		<xs1:text author="" page="16" pageOffset="0" part="0" scale="3" sourceid="1" id="6" date="Thu, 24 Jun 2010 00:59:00 GMT" tz="240" mime="application/pdf" path="database/media/books/Unknown/ProgrammingInLUAEd.1 - Unknown_11.pdf" size="26391260" title="ProgrammingInLUAEd.1 - Unknown_11"/>
+		<xs1:text author="Charlaine Harris" page="690" pageOffset="0" part="0" scale="1" sourceid="1" id="7" date="Thu, 24 Jun 2010 02:31:42 GMT" tz="240" mime="application/x-sony-bbeb" path="database/media/books/Harris, Charlaine/Dead as a Doornail - Charlaine Harris_1049.lrf" size="252128" title="Dead as a Doornail"/>
+		<xs1:text author="Charlaine Harris" page="17" pageOffset="3" part="0" scale="1" sourceid="1" id="8" date="Fri, 02 Jul 2010 02:30:02 GMT" tz="240" mime="application/epub+zip" path="database/media/books/Harris, Charlaine/Definitely Dead - Charlaine Harris_1050.epub" size="332779" title="Definitely Dead"/>
+		<xs1:playlist title="Fantasy" sourceid="0" id="9" uuid="3132559B0D5E-48CC-8E02-0F7FB64220BF">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="Food Writing" sourceid="0" id="10" uuid="171C8563F6AB-4E30-A339-5CD8E1E41BF2">
+			<xs1:item id="2"/>
+		</xs1:playlist>
+		<xs1:playlist title="Occult" sourceid="0" id="11" uuid="644606447F1F-4274-B0FE-E8EAC91E2712">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="Mystery &amp; Detective" sourceid="0" id="12" uuid="6351D494FD1C-4D0D-A7CE-333E17D31533">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="Horror" sourceid="0" id="13" uuid="98E70D1A4FB9-438F-BC51-1A307A89C807">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="Contemporary" sourceid="0" id="14" uuid="1C92CCE4CA35-4D60-9BCF-A7DBE2CE458B">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="General" sourceid="0" id="15" uuid="7E364A55C28B-4F0F-8805-D0F2AABD7628">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="Women Sleuths" sourceid="0" id="16" uuid="493EF8B1117A-4477-A87B-6DDB06B0248C">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+		<xs1:playlist title="Fiction" sourceid="0" id="17" uuid="997891D44F49-4746-AABF-D4CDC4BB8D57">
+			<xs1:item id="3"/>
+		</xs1:playlist>
+	</records>
+</xdbLite>
