@@ -165,20 +165,21 @@ namespace WindowsFormsApplication1
             System.Diagnostics.Process.Start(oauthURL);
 
             // Instead of sleeping prompt the user to verify that they entered their credentials before proceeding to the next step
-            System.Threading.Thread.Sleep(10000);
+            if (MessageBox.Show("Did you allow Bibliomania access?", "Confirm Access", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                uri = new Uri("http://www.goodreads.com/oauth/access_token");
+                nonce = oAuth.GenerateNonce();
+                timeStamp = oAuth.GenerateTimeStamp();
+                // this time we need our oauth token and oauth token secret
+                sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+                sig = HttpUtility.UrlEncode(sig);
 
-            uri = new Uri("http://www.goodreads.com/oauth/access_token");
-            nonce = oAuth.GenerateNonce();
-            timeStamp = oAuth.GenerateTimeStamp();
-            // this time we need our oauth token and oauth token secret
-            sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
-            sig = HttpUtility.UrlEncode(sig);
+                // notice that the sig is always being appended to the end
+                string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
 
-            // notice that the sig is always being appended to the end
-            string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
-
-            oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
-            Console.WriteLine("ouathToken: " + oauthToken + "oauthTokenSecret:" + oauthTokenSecret);
+                oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
+                Console.WriteLine("ouathToken: " + oauthToken + "oauthTokenSecret:" + oauthTokenSecret);
+            }
         }
 
         private void oauthTokenReq(string url, out string oauthTok, out string oauthTokSecret)
