@@ -10,13 +10,15 @@ using System.Xml;
 using System.Collections;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Web;
+using System.Net;
 
 
 
 namespace WindowsFormsApplication1 {
 	public partial class Form1 : Form {
 		public List<Book> readBooks = new List<Book>();
-		public string userId;
+		public string userId = "";
 
 		public Form1() {
 			InitializeComponent();
@@ -103,7 +105,7 @@ namespace WindowsFormsApplication1 {
 		}
 
 		private void pictureBox1_Click(object sender, EventArgs e) {
-			loginUser();
+			submitStatuses();
 		}
 
 
@@ -112,11 +114,37 @@ namespace WindowsFormsApplication1 {
 			loginUser();
 		}
 
-		private void loginUser() {
-			//Properties.Settings.Default.OAuthToken = "";
-			//Properties.Settings.Default.OAuthTokenSecret = "";
-			//Properties.Settings.Default.Save();
+		private void submitStatuses() {
+			OAuth oAuth = new OAuth();
 
+			if (userId.Equals("")) {
+				loginUser();
+			}
+
+			for(int i = 0; i < bookList.Items.Count; i++) {
+				Book curBook = readBooks[i];
+
+				if (bookList.GetItemChecked(i)) {
+					// submit this status
+					string statusURL = oAuth.getOAuthDataUrl("http://www.goodreads.com/user_status.xml");
+					HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(statusURL);
+					httpRequest.Method = "POST";
+					httpRequest.ContentType = "application/x-www-form-urlencoded";
+					string postData = "user_status[book_id]=" + curBook.GoodreadsId + "&user_status[page]=" + curBook.CurrentPage + "&user_status[body]=Added%2BBy%2BBibliomania";
+					httpRequest.ContentLength = postData.Length;
+					StreamWriter stOut = new StreamWriter(httpRequest.GetRequestStream(), System.Text.Encoding.ASCII);
+					stOut.Write(postData);
+					stOut.Close();
+					StreamReader stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
+					string strResponse = stIn.ReadToEnd();
+					stIn.Close();
+
+					Console.WriteLine(strResponse);
+				}
+			}
+		}
+
+		private void loginUser() {
 			OAuth oAuth = new OAuth();
 			oAuth.getOAuthToken();
 			string userXML = oAuth.getOAuthDataUrl("http://www.goodreads.com/api/auth_user");
@@ -137,6 +165,10 @@ namespace WindowsFormsApplication1 {
 				}
 
 			}
+		}
+
+		private void pictureBox2_Click(object sender, EventArgs e) {
+			loginUser();
 		}
 	}
 }
