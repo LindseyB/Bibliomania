@@ -34,5 +34,29 @@ namespace WindowsFormsApplication1.Properties {
                 this["Books"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OAuthToken {
+            get {
+                return ((string)(this["OAuthToken"]));
+            }
+            set {
+                this["OAuthToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string OAuthTokenSecret {
+            get {
+                return ((string)(this["OAuthTokenSecret"]));
+            }
+            set {
+                this["OAuthTokenSecret"] = value;
+            }
+        }
     }
 }
