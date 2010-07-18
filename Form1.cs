@@ -44,7 +44,7 @@ namespace WindowsFormsApplication1 {
 			}
 
 			// open up the readers XML data about the users read books
-			XmlTextReader textReader = new XmlTextReader("tests\\media.xml");
+			XmlTextReader textReader = new XmlTextReader("J:\\database\\cache\\media.xml");
 
 			try {
 				textReader.Read();
