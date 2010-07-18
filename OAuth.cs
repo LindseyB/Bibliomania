@@ -19,6 +19,8 @@ namespace WindowsFormsApplication1 {
 		public OAuth() {
 			consumerKey = "eStfu8ZZXxins2tOdlVjUA";
 			consumerSecret = "A773YHERJAWODRasHREh9GOjFTEuGdGQvu1cfbXFfM";  // shhh! It's a secret
+			oauthToken = Properties.Settings.Default.OAuthToken;
+			oauthTokenSecret = Properties.Settings.Default.OAuthTokenSecret;
 		}
 
 		// get the token for the first time 
@@ -38,9 +40,6 @@ namespace WindowsFormsApplication1 {
 				string request_url = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
 
 				oauthTokenReq(request_url, out oauthToken, out oauthTokenSecret);
-				// store these in the settings
-				Properties.Settings.Default.OAuthToken = oauthToken;
-				Properties.Settings.Default.OAuthTokenSecret = oauthTokenSecret;
 
 				// go get authorized
 				uri = new Uri("http://www.goodreads.com/oauth/authorize");
@@ -56,20 +55,22 @@ namespace WindowsFormsApplication1 {
 					return;
 				}
 
+				uri = new Uri("http://www.goodreads.com/oauth/access_token");
+				nonce = oAuth.GenerateNonce();
+				timeStamp = oAuth.GenerateTimeStamp();
+				// this time we need our oauth token and oauth token secret
+				sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+				sig = HttpUtility.UrlEncode(sig);
+
+				// notice that the sig is always being appended to the end
+				string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
+
+				oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
+				// store these in the settings
+				Properties.Settings.Default.OAuthToken = oauthToken;
+				Properties.Settings.Default.OAuthTokenSecret = oauthTokenSecret;
 				Properties.Settings.Default.Save();
 			}
-
-			uri = new Uri("http://www.goodreads.com/oauth/access_token");
-			nonce = oAuth.GenerateNonce();
-			timeStamp = oAuth.GenerateTimeStamp();
-			// this time we need our oauth token and oauth token secret
-			sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
-			sig = HttpUtility.UrlEncode(sig);
-
-			// notice that the sig is always being appended to the end
-			string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
-
-			oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
 		}
 
 		public string getOAuthDataUrl(string url) {

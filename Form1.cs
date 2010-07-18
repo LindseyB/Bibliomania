@@ -113,6 +113,10 @@ namespace WindowsFormsApplication1 {
 		}
 
 		private void loginUser() {
+			//Properties.Settings.Default.OAuthToken = "";
+			//Properties.Settings.Default.OAuthTokenSecret = "";
+			//Properties.Settings.Default.Save();
+
 			OAuth oAuth = new OAuth();
 			oAuth.getOAuthToken();
 			string userXML = oAuth.getOAuthDataUrl("http://www.goodreads.com/api/auth_user");
@@ -129,7 +133,7 @@ namespace WindowsFormsApplication1 {
 				}
 
 				if (textReader.LocalName.Equals("name")) {
-					label1.Text = textReader.ReadElementContentAsString();
+					label1.Text = "hi, " + textReader.ReadElementContentAsString();
 				}
 
 			}
