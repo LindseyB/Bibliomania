@@ -114,9 +114,11 @@ namespace WindowsFormsApplication1 {
 			loginUser();
 		}
 
-		private void submitStatuses() {
-			OAuth oAuth = new OAuth();
+		private void pictureBox2_Click(object sender, EventArgs e) {
+			loginUser();
+		}
 
+		private void submitStatuses() {
 			if (userId.Equals("")) {
 				loginUser();
 			}
@@ -125,23 +127,50 @@ namespace WindowsFormsApplication1 {
 				Book curBook = readBooks[i];
 
 				if (bookList.GetItemChecked(i)) {
+					// add the book to the currently reading shelf 
+					addBookToShelf(curBook);
 					// submit this status
-					string statusURL = oAuth.getOAuthDataUrl("http://www.goodreads.com/user_status.xml");
-					HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(statusURL);
-					httpRequest.Method = "POST";
-					httpRequest.ContentType = "application/x-www-form-urlencoded";
-					string postData = "user_status[book_id]=" + curBook.GoodreadsId + "&user_status[page]=" + curBook.CurrentPage + "&user_status[body]=Added%2BBy%2BBibliomania";
-					httpRequest.ContentLength = postData.Length;
-					StreamWriter stOut = new StreamWriter(httpRequest.GetRequestStream(), System.Text.Encoding.ASCII);
-					stOut.Write(postData);
-					stOut.Close();
-					StreamReader stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
-					string strResponse = stIn.ReadToEnd();
-					stIn.Close();
-
-					Console.WriteLine(strResponse);
+					submitBookStatus(curBook);
 				}
 			}
+		}
+
+		private void addBookToShelf(Book book) {
+			OAuth oAuth = new OAuth();
+
+			string shelfURL = oAuth.getOAuthDataUrl("http://www.goodreads.com/shelf/add_to_shelf.xml");
+			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(shelfURL);
+			httpRequest.Method = "POST";
+			httpRequest.ContentType = "application/x-www-form-urlencoded";
+			string postData = "book_id=" + book.GoodreadsId + "&name=currently-reading";
+			httpRequest.ContentLength = postData.Length;
+			StreamWriter stOut = new StreamWriter(httpRequest.GetRequestStream(), System.Text.Encoding.ASCII);
+			stOut.Write(postData);
+			stOut.Close();
+			StreamReader stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
+			string strResponse = stIn.ReadToEnd();
+			stIn.Close();
+
+			Console.WriteLine(strResponse);
+		}
+
+		private void submitBookStatus(Book book) {
+			OAuth oAuth = new OAuth();
+
+			string statusURL = oAuth.getOAuthDataUrl("http://www.goodreads.com/user_status.xml");
+			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(statusURL);
+			httpRequest.Method = "POST";
+			httpRequest.ContentType = "application/x-www-form-urlencoded";
+			string postData = "user_status[book_id]=" + book.GoodreadsId + "&user_status[page]=" + book.CurrentPage + "&user_status[body]=Added%20By%20Bibliomania";
+			httpRequest.ContentLength = postData.Length;
+			StreamWriter stOut = new StreamWriter(httpRequest.GetRequestStream(), System.Text.Encoding.ASCII);
+			stOut.Write(postData);
+			stOut.Close();
+			StreamReader stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
+			string strResponse = stIn.ReadToEnd();
+			stIn.Close();
+
+			Console.WriteLine(strResponse);
 		}
 
 		private void loginUser() {
@@ -167,8 +196,6 @@ namespace WindowsFormsApplication1 {
 			}
 		}
 
-		private void pictureBox2_Click(object sender, EventArgs e) {
-			loginUser();
-		}
+
 	}
 }
