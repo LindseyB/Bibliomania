@@ -23,49 +23,69 @@ namespace WindowsFormsApplication1 {
 
 		// get the token for the first time 
 		public void getOAuthToken() {
-			// please note that the url needs to be EXACTLY the url it needs to / will hit
-			// this means if the page forwards foo.bar to www.foo.bar the uri needs to be specified as www.foo.bar
-			Uri uri = new Uri("http://www.goodreads.com/oauth/request_token");
 			OAuthBase oAuth = new OAuthBase();
+			string nonce, normalizedUrl, normalizedRequestParameters, sig, timeStamp;
+			Uri uri;
+			if (Properties.Settings.Default.OAuthToken.Equals("") || Properties.Settings.Default.Equals("")) {
+				uri = new Uri("http://www.goodreads.com/oauth/request_token");
 
-			string nonce = oAuth.GenerateNonce();
-			string timeStamp = oAuth.GenerateTimeStamp();
-			string normalizedUrl;
-			string normalizedRequestParameters;
-			string sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, null, null, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
-
-			sig = HttpUtility.UrlEncode(sig);
-
-			string request_url = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
-
-			oauthTokenReq(request_url, out oauthToken, out oauthTokenSecret);
-
-			// go get authorized
-			uri = new Uri("http://www.goodreads.com/oauth/authorize");
-			string oauthURL = uri.ToString() + "?oauth_token=" + oauthToken;
-			// open a browser and allow the user to authorize 
-			System.Diagnostics.Process.Start(oauthURL);
-
-			// Instead of sleeping prompt the user to verify that they entered their credentials before proceeding to the next step
-			if (MessageBox.Show("Did you allow Bibliomania access?", "Confirm Access", MessageBoxButtons.YesNo) == DialogResult.Yes) {
-				uri = new Uri("http://www.goodreads.com/oauth/access_token");
 				nonce = oAuth.GenerateNonce();
 				timeStamp = oAuth.GenerateTimeStamp();
-				// this time we need our oauth token and oauth token secret
-				sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+				sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, null, null, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+
 				sig = HttpUtility.UrlEncode(sig);
 
-				// notice that the sig is always being appended to the end
-				string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
+				string request_url = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
 
-				oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
+				oauthTokenReq(request_url, out oauthToken, out oauthTokenSecret);
+				// store these in the settings
+				Properties.Settings.Default.OAuthToken = oauthToken;
+				Properties.Settings.Default.OAuthTokenSecret = oauthTokenSecret;
+
+				// go get authorized
+				uri = new Uri("http://www.goodreads.com/oauth/authorize");
+				string oauthURL = uri.ToString() + "?oauth_token=" + oauthToken;
+				// open a browser and allow the user to authorize 
+				System.Diagnostics.Process.Start(oauthURL);
+
+				// Instead of sleeping prompt the user to verify that they entered their credentials before proceeding to the next step
+				if (MessageBox.Show("Did you allow Bibliomania access?", "Confirm Access", MessageBoxButtons.YesNo) == DialogResult.No) {
+					Properties.Settings.Default.OAuthToken = "";
+					Properties.Settings.Default.OAuthTokenSecret = "";
+					Properties.Settings.Default.Save();
+					return;
+				}
+
+				Properties.Settings.Default.Save();
 			}
+
+			uri = new Uri("http://www.goodreads.com/oauth/access_token");
+			nonce = oAuth.GenerateNonce();
+			timeStamp = oAuth.GenerateTimeStamp();
+			// this time we need our oauth token and oauth token secret
+			sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+			sig = HttpUtility.UrlEncode(sig);
+
+			// notice that the sig is always being appended to the end
+			string accessUrl = normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
+
+			oauthTokenReq(accessUrl, out oauthToken, out oauthTokenSecret);
+		}
+
+		public string getOAuthDataUrl(string url) {
+			OAuthBase oAuth = new OAuthBase();
+			Uri uri = new Uri(url);
+			string nonce = oAuth.GenerateNonce();
+			string timeStamp = oAuth.GenerateTimeStamp();
+			string normalizedUrl, normalizedRequestParameters;
+
+			string sig = oAuth.GenerateSignature(uri, consumerKey, consumerSecret, oauthToken, oauthTokenSecret, "GET", timeStamp, nonce, out normalizedUrl, out normalizedRequestParameters);
+			sig = HttpUtility.UrlEncode(sig);
+			return normalizedUrl + "?" + normalizedRequestParameters + "&oauth_signature=" + sig;
 		}
 
 		// helper function for requesting the token from the server
 		private void oauthTokenReq(string url, out string oauthTok, out string oauthTokSecret) {
-			Console.WriteLine(url);
-
 			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
 			Stream responseStream;
 

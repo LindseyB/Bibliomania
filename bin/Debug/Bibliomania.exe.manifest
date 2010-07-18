@@ -42,24 +42,24 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bibliomania.exe" size="32256">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bibliomania.exe" size="33280">
       <assemblyIdentity name="Bibliomania" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>T1Mc8sTlUkbnz5+IwjGjt9BBb8c=</dsig:DigestValue>
+        <dsig:DigestValue>pGEp71aVLpwUN+FuNAbEvS+L2aM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Bibliomania.exe.config" size="907">
+  <file name="Bibliomania.exe.config" size="1140">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>8yBlVsitrf89EM9rR5wy08+v4Is=</dsig:DigestValue>
+      <dsig:DigestValue>yM8LKn0MFfRzVwZTvOMHo5EXi4Q=</dsig:DigestValue>
     </hash>
   </file>
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">

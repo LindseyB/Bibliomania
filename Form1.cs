@@ -16,6 +16,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace WindowsFormsApplication1 {
 	public partial class Form1 : Form {
 		public List<Book> readBooks = new List<Book>();
+		public string userId;
 
 		public Form1() {
 			InitializeComponent();
@@ -39,8 +40,6 @@ namespace WindowsFormsApplication1 {
 					}
 				}
 			}
-
-			Console.WriteLine("Settings: " + settingsBooksString);
 
 			// open up the readers XML data about the users read books
 			XmlTextReader textReader = new XmlTextReader("tests\\media.xml");
@@ -104,15 +103,36 @@ namespace WindowsFormsApplication1 {
 		}
 
 		private void pictureBox1_Click(object sender, EventArgs e) {
-			OAuth oAuth = new OAuth();
-			oAuth.getOAuthToken();
+			loginUser();
 		}
 
 
 
 		private void label1_Click(object sender, EventArgs e) {
+			loginUser();
+		}
+
+		private void loginUser() {
 			OAuth oAuth = new OAuth();
 			oAuth.getOAuthToken();
+			string userXML = oAuth.getOAuthDataUrl("http://www.goodreads.com/api/auth_user");
+
+			// grab the user name and user id
+			XmlTextReader textReader = new XmlTextReader(userXML);
+
+			while (textReader.Read()) {
+				textReader.MoveToElement();
+
+				if (textReader.LocalName.Equals("user")) {
+					textReader.MoveToAttribute("id");
+					userId = textReader.Value;
+				}
+
+				if (textReader.LocalName.Equals("name")) {
+					label1.Text = textReader.ReadElementContentAsString();
+				}
+
+			}
 		}
 	}
 }
