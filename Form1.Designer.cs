@@ -58,7 +58,7 @@
 			this.label1.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.ForeColor = System.Drawing.SystemColors.ButtonShadow;
 			this.label1.Image = global::WindowsFormsApplication1.Properties.Resources.accounttabbox;
-			this.label1.Location = new System.Drawing.Point(29, 9);
+			this.label1.Location = new System.Drawing.Point(31, 9);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(96, 19);
 			this.label1.TabIndex = 3;

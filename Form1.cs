@@ -19,11 +19,13 @@ namespace WindowsFormsApplication1 {
 	public partial class Form1 : Form {
 		public List<Book> readBooks = new List<Book>();
 		public string userId = "";
+		public string userName = "";
 
 		public Form1() {
 			InitializeComponent();
 		}
 
+		// load in the book information from the saved settings and the XML on the device
 		public void loadBooks() {
 			String settingsBooksString = Properties.Settings.Default.Books;
 			String[] booksFromSettings = settingsBooksString.Split('\n');
@@ -43,6 +45,7 @@ namespace WindowsFormsApplication1 {
 				}
 			}
 
+			// TODO: update this to detect reader location on the fly
 			// open up the readers XML data about the users read books
 			XmlTextReader textReader = new XmlTextReader("J:\\database\\cache\\media.xml");
 
@@ -100,27 +103,34 @@ namespace WindowsFormsApplication1 {
 
 		}
 
+		// once the form has finished loading load the books form the XML
 		private void Form1_Shown(object sender, EventArgs e) {
 			loadBooks();
 		}
 
+		// submit status when button is clicked
 		private void pictureBox1_Click(object sender, EventArgs e) {
 			submitStatuses();
 		}
 
 
-
+		// log the user in when the button is clicked
 		private void label1_Click(object sender, EventArgs e) {
-			loginUser();
+			GoodreadsAPI.loginUser(out userId, out userName);
+			label1.Text = userName;
 		}
 
+		// log the user in when the button is clicked
 		private void pictureBox2_Click(object sender, EventArgs e) {
-			loginUser();
+			GoodreadsAPI.loginUser(out userId, out userName);
+			label1.Text = userName;
 		}
 
+		// submit all of the selected books as status updates
 		private void submitStatuses() {
 			if (userId.Equals("")) {
-				loginUser();
+				GoodreadsAPI.loginUser(out userId, out userName);
+				label1.Text = userName;
 			}
 
 			for(int i = 0; i < bookList.Items.Count; i++) {
@@ -128,74 +138,11 @@ namespace WindowsFormsApplication1 {
 
 				if (bookList.GetItemChecked(i)) {
 					// add the book to the currently reading shelf 
-					addBookToShelf(curBook);
+					GoodreadsAPI.addBookToShelf(curBook);
 					// submit this status
-					submitBookStatus(curBook);
+					GoodreadsAPI.submitBookStatus(curBook);
 				}
 			}
 		}
-
-		private void addBookToShelf(Book book) {
-			OAuth oAuth = new OAuth();
-
-			string shelfURL = oAuth.getOAuthDataUrl("http://www.goodreads.com/shelf/add_to_shelf.xml");
-			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(shelfURL);
-			httpRequest.Method = "POST";
-			httpRequest.ContentType = "application/x-www-form-urlencoded";
-			string postData = "book_id=" + book.GoodreadsId + "&name=currently-reading";
-			httpRequest.ContentLength = postData.Length;
-			StreamWriter stOut = new StreamWriter(httpRequest.GetRequestStream(), System.Text.Encoding.ASCII);
-			stOut.Write(postData);
-			stOut.Close();
-			StreamReader stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
-			string strResponse = stIn.ReadToEnd();
-			stIn.Close();
-
-			Console.WriteLine(strResponse);
-		}
-
-		private void submitBookStatus(Book book) {
-			OAuth oAuth = new OAuth();
-
-			string statusURL = oAuth.getOAuthDataUrl("http://www.goodreads.com/user_status.xml");
-			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(statusURL);
-			httpRequest.Method = "POST";
-			httpRequest.ContentType = "application/x-www-form-urlencoded";
-			string postData = "user_status[book_id]=" + book.GoodreadsId + "&user_status[page]=" + book.CurrentPage + "&user_status[body]=Added%20By%20Bibliomania";
-			httpRequest.ContentLength = postData.Length;
-			StreamWriter stOut = new StreamWriter(httpRequest.GetRequestStream(), System.Text.Encoding.ASCII);
-			stOut.Write(postData);
-			stOut.Close();
-			StreamReader stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
-			string strResponse = stIn.ReadToEnd();
-			stIn.Close();
-
-			Console.WriteLine(strResponse);
-		}
-
-		private void loginUser() {
-			OAuth oAuth = new OAuth();
-			oAuth.getOAuthToken();
-			string userXML = oAuth.getOAuthDataUrl("http://www.goodreads.com/api/auth_user");
-
-			// grab the user name and user id
-			XmlTextReader textReader = new XmlTextReader(userXML);
-
-			while (textReader.Read()) {
-				textReader.MoveToElement();
-
-				if (textReader.LocalName.Equals("user")) {
-					textReader.MoveToAttribute("id");
-					userId = textReader.Value;
-				}
-
-				if (textReader.LocalName.Equals("name")) {
-					label1.Text = "hi, " + textReader.ReadElementContentAsString();
-				}
-
-			}
-		}
-
-
 	}
 }

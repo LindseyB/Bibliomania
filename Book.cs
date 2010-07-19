@@ -66,8 +66,6 @@ namespace WindowsFormsApplication1 {
 				return;
 			}
 
-			Console.WriteLine("Let's ask the internet");
-
 			// generate the url for the api call
 			String url = "http://www.goodreads.com/api/book_url/" + SecurityElement.Escape(_origTitle.Replace(" ", "%2B")) + "%2B" + SecurityElement.Escape(_author.Replace(" ", "%2B")) + "?key=eStfu8ZZXxins2tOdlVjUA";
 			XmlTextReader textReader = new XmlTextReader(url);

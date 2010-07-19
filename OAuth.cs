@@ -23,11 +23,13 @@ namespace WindowsFormsApplication1 {
 			oauthTokenSecret = Properties.Settings.Default.OAuthTokenSecret;
 		}
 
-		// get the token for the first time 
+		// gets the oauth token if we do not have one already 
 		public void getOAuthToken() {
 			OAuthBase oAuth = new OAuthBase();
 			string nonce, normalizedUrl, normalizedRequestParameters, sig, timeStamp;
 			Uri uri;
+
+			// TODO: verify that the tokens we currently have are active and permission has not been revoked for the app
 			if (Properties.Settings.Default.OAuthToken.Equals("") || Properties.Settings.Default.Equals("")) {
 				uri = new Uri("http://www.goodreads.com/oauth/request_token");
 
@@ -73,6 +75,7 @@ namespace WindowsFormsApplication1 {
 			}
 		}
 
+		// generates the url for accessing data that we need to use OAuth to access
 		public string getOAuthDataUrl(string url) {
 			OAuthBase oAuth = new OAuthBase();
 			Uri uri = new Uri(url);
@@ -88,39 +91,22 @@ namespace WindowsFormsApplication1 {
 		// helper function for requesting the token from the server
 		private void oauthTokenReq(string url, out string oauthTok, out string oauthTokSecret) {
 			HttpWebRequest httpRequest = (HttpWebRequest)WebRequest.Create(url);
-			Stream responseStream;
+			StreamReader stIn;
 
 			try {
-				responseStream = httpRequest.GetResponse().GetResponseStream();
-			} catch (WebException e) {
+				stIn = new StreamReader(httpRequest.GetResponse().GetResponseStream());
+			} catch (Exception e) {
 				Console.WriteLine(e.Message);
 				oauthTok = "";
 				oauthTokSecret = "";
 				return;
 			}
 
-			byte[] buf = new byte[1024];
-			int count = 0;
-			StringBuilder sb = new StringBuilder("");
-			string tempString;
+			string strResponse = stIn.ReadToEnd();
+			stIn.Close();
 
-			// I am not a fan of this loop.
-			do {
-				// fill the buffer with data
-				count = responseStream.Read(buf, 0, buf.Length);
-
-				// make sure we read some data
-				if (count != 0) {
-					// translate from bytes to ASCII text
-					tempString = Encoding.ASCII.GetString(buf, 0, count);
-
-					// continue building the string
-					sb.Append(tempString);
-				}
-			} while (count > 0);
-
-			oauthTok = sb.ToString().Substring(12, sb.ToString().IndexOf('&') - 12);
-			oauthTokSecret = sb.ToString().Substring(sb.ToString().IndexOf('&') + 20);
+			oauthTok = strResponse.Substring(12, strResponse.IndexOf('&') - 12);
+			oauthTokSecret = strResponse.Substring(strResponse.IndexOf('&') + 20);
 		}
 	}
 }

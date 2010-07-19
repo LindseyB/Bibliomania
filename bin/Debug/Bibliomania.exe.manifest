@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bibliomania.exe" size="34816">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bibliomania.exe" size="35328">
       <assemblyIdentity name="Bibliomania" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ne340C0j6LSXfG80seO7l0q5ghw=</dsig:DigestValue>
+        <dsig:DigestValue>HMqMoWVoV+t//5KDpRiVbSvTggg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
